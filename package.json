@@ -47,5 +47,10 @@
     "eject": "react-scripts eject",
     "lint": "eslint src --ext=js,jsx",
     "prepush": "npm run lint"
+  },
+  "husky": {
+    "hooks": {
+      "pre-push": "npm run lint"
+    }
   }
 }
