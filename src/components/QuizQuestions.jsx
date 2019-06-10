@@ -4,24 +4,38 @@ import PropTypes from 'prop-types';
 
 import Progress from './Progress';
 import AnswersList from './AnswersList';
+import { Title } from './Title';
 
 const Section = styled.div`
+  width: 100%;
   display: ${props => (props.current === props.index ? 'block' : 'none')};
 `;
 
-class QuizQuestions extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      current: 0,
-      result: ``,
-      final: {
-        total: null,
-        correct: null,
-      },
-      finish: false,
-    };
+const Final = styled.p`
+  font-size: 16px;
+  line-height: 20px;
+  text-align: center;
+
+  span {
+    font-weight: bold;
   }
+
+  @media screen and (min-width: 600px) {
+    font-size: 24px;
+    line-height: 30px;
+  }
+`;
+
+class QuizQuestions extends Component {
+  state = {
+    current: 0,
+    result: ``,
+    final: {
+      total: null,
+      correct: null,
+    },
+    finish: false,
+  };
 
   setCurrent = current => {
     this.setState({ current });
@@ -43,7 +57,7 @@ class QuizQuestions extends Component {
       <>
         {questions.map((item, i) => (
           <Section key={i.toString()} index={i} current={current}>
-            <h1>{item.title}</h1>
+            <Title>{item.title}</Title>
             <AnswersList
               questionsQuantity={questionsQuantity}
               questionId={item.id}
@@ -64,11 +78,11 @@ class QuizQuestions extends Component {
 
         {current === questionsQuantity && finish && (
           <>
-            <p>Thanks, {name}</p>
-            <p>
-              You responded correctly {final.correct} out of {final.total}{' '}
-              questions
-            </p>
+            <Title>Thanks, {name}</Title>
+            <Final>
+              You responded correctly <span>{final.correct}</span>
+              &nbsp;out&nbsp;of&nbsp;<span>{final.total}</span>&nbsp;questions
+            </Final>
           </>
         )}
       </>
@@ -78,7 +92,7 @@ class QuizQuestions extends Component {
 
 QuizQuestions.propTypes = {
   questions: PropTypes.array,
-  quizId: PropTypes.number,
+  quizId: PropTypes.string,
   questionsQuantity: PropTypes.number,
   name: PropTypes.string,
 };

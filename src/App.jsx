@@ -12,6 +12,7 @@ const apiUrl = `https://printful.com/test-quiz.php?action=`;
 const Main = styled.section`
   width: 100%;
   max-width: 1100px;
+  padding: 0 10px;
   margin: 0 auto;
   display: flex;
   flex-direction: column;
@@ -29,6 +30,7 @@ const Input = styled.input`
   font-size: 18px;
   line-height: 52px;
   max-width: 500px;
+  margin-bottom: 20px;
 
   @media screen and (min-width: 600px) {
     padding: 0 30px;
@@ -37,8 +39,11 @@ const Input = styled.input`
     border-width: 3px;
     font-size: 24px;
     line-height: 80px;
-    margin-bottom: 20px;
   }
+`;
+
+const Select = styled.select`
+  margin-bottom: 20px;
 `;
 
 class App extends Component {
@@ -97,19 +102,20 @@ class App extends Component {
               value={name}
               required
             />
-            <select disabled={!name} onChange={this.handleChange}>
+            <Select disabled={!name} onChange={this.handleChange}>
               <option>Please choose quiz</option>
               {quizzes.map((item, i) => (
                 <option key={i.toString()} value={item.id}>
                   {item.title}
                 </option>
               ))}
-            </select>
+            </Select>
             <Button
               title='start'
               text='Start'
               disabled={!quizId}
               onClick={this.handleClick}
+              className={quizId ? 'animation' : ''}
             />
           </>
         )}

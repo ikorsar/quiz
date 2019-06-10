@@ -1,11 +1,26 @@
 import React, { Component } from 'react';
+import styled from 'styled-components';
 import axios from 'axios';
+import PropTypes from 'prop-types';
 
 import Answer from './Answer';
 
 const apiUrl = `https://printful.com/test-quiz.php?action=answers&quizId=`;
 
-class OptionsList extends Component {
+const AnswersListSt = styled.section`
+  display: grid;
+  grid-template-columns: 1fr;
+  grid-gap: 20px;
+  width: 80%;
+  margin-left: auto;
+  margin-right: auto;
+
+  @media screen and (min-width: 600px) {
+    grid-template-columns: 1fr 1fr;
+  }
+`;
+
+class AnswersList extends Component {
   state = {
     list: [],
     final: null,
@@ -57,7 +72,7 @@ class OptionsList extends Component {
     const { questionsQuantity } = this.props;
 
     return (
-      <div>
+      <AnswersListSt>
         {list.map((item, i) => (
           <Answer
             questionsQuantity={questionsQuantity}
@@ -69,9 +84,22 @@ class OptionsList extends Component {
           />
         ))}
         {final}
-      </div>
+      </AnswersListSt>
     );
   }
 }
 
-export default OptionsList;
+AnswersList.propTypes = {
+  setCurrent: PropTypes.func,
+  setResults: PropTypes.func,
+  setFinal: PropTypes.func,
+  questions: PropTypes.array,
+  questionId: PropTypes.number,
+  quizId: PropTypes.string,
+  current: PropTypes.number,
+  result: PropTypes.string,
+  questionsQuantity: PropTypes.number,
+  name: PropTypes.string,
+};
+
+export default AnswersList;
