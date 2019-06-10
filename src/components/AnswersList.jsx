@@ -3,9 +3,8 @@ import styled from 'styled-components';
 import axios from 'axios';
 import PropTypes from 'prop-types';
 
+import { getAnswersUrl, setAnswersUrl } from './api';
 import Answer from './Answer';
-
-const apiUrl = `https://printful.com/test-quiz.php?action=answers&quizId=`;
 
 const AnswersListSt = styled.section`
   display: grid;
@@ -29,14 +28,15 @@ class AnswersList extends Component {
   componentDidMount() {
     const { questionId, quizId } = this.props;
 
-    axios.get(`${apiUrl}${quizId}&questionId=${questionId}`).then(res => {
-      const list = res.data;
-      this.setState({ list });
-    });
+    axios
+      .get(`${getAnswersUrl}${quizId}&questionId=${questionId}`)
+      .then(res => {
+        const list = res.data;
+        this.setState({ list });
+      });
   }
 
   handleChange = e => {
-    // e.preventDefault();
     const {
       setCurrent,
       current,
@@ -56,14 +56,10 @@ class AnswersList extends Component {
     setCurrent(current + 1);
 
     if (current === questionsQuantity - 1) {
-      axios
-        .get(
-          `https://printful.com/test-quiz.php?action=submit&quizId=${quizId}${result}`
-        )
-        .then(res => {
-          const final = res.data;
-          setFinal(final);
-        });
+      axios.get(`${setAnswersUrl}${quizId}${result}`).then(res => {
+        const final = res.data;
+        setFinal(final);
+      });
     }
   };
 

@@ -2,82 +2,93 @@ import React, { Component } from 'react';
 import styled from 'styled-components';
 import PropTypes from 'prop-types';
 
-const DropdownSelectSt = styled.div`
-  border: none;
-  background-color: transparent;
-  padding: 0;
+import arrow from './down-icon.svg';
+
+const Dropdown = styled.button`
+  width: 100%;
+  max-width: 500px;
+  font-weight: 500;
+  text-align: left;
+  height: 56px;
+  border-radius: 4px;
+  border-width: 2px;
+  border-style: solid;
+  border-color: #000;
+  background-color: #ffffff;
+  padding: 0 30px;
   position: relative;
   cursor: pointer;
-  display: flex;
-  flex-direction: column;
-  width: 100%;
-  max-width: 400px;
-`;
+  margin-bottom: 20px;
+  font-family: 'Raleway', Helvetica Neue, Helvetica, Arial, sans-serif;
 
-const Choosen = styled.span`
-  font-size: 18px;
-  line-height: 24px;
-  color: #000;
-  text-align: center;
-  font-weight: 500;
-  height: 34px;
-  border-bottom: 2px solid rgba(0, 0, 0, 0.25);
-  width: 100%;
-  span {
-    color: rgba(0, 0, 0, 0.5);
-  }
-
-  &:hover {
-    color: #000;
+  &.disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
   }
 
   @media screen and (min-width: 600px) {
+    padding: 0 30px;
+    height: 86px;
+    border-radius: 6px;
+    border-width: 3px;
     font-size: 24px;
-    line-height: 30px;
-    height: 48px;
+    line-height: 80px;
+    margin-bottom: 40px;
   }
 `;
 
-const SelectInner = styled.select`
+const Arrow = styled.img`
+  width: 22px;
+  height: 10px;
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  right: 30px;
+`;
+
+const Select = styled.select`
   opacity: 0;
   position: absolute;
   left: 0;
   width: 100%;
+  height: 100%;
   cursor: pointer;
-  padding: 0;
-  bottom: -3px;
-  top: 0;
+
+  &:disabled,
+  &:disabled:hover,
+  &[disabled],
+  &[disabled]:hover {
+    cursor: not-allowed;
+  }
 `;
 
 class DropdownSelect extends Component {
   render() {
-    const { list, placeholder, disabled, onChange, name } = this.props;
+    const { className, quizName, quizzes, onChange, disabled } = this.props;
 
     return (
-      <DropdownSelectSt list={list}>
-        {name === '' && (
-          <Choosen>
-            <span>{placeholder}</span>
-          </Choosen>
-        )}
-        {name !== '' && <Choosen>{name}</Choosen>}
-        <SelectInner name={name} onChange={onChange} disabled={disabled}>
-          {list.map((item, i) => (
+      <Dropdown className={className}>
+        {!quizName ? 'Please choose quiz' : quizName}
+        <Arrow src={arrow} />
+        <Select disabled={disabled} onChange={onChange}>
+          <option>Please choose quiz</option>
+          {quizzes.map((item, i) => (
             <option key={i.toString()} value={item.id} name={item.title}>
               {item.title}
             </option>
           ))}
-        </SelectInner>
-      </DropdownSelectSt>
+        </Select>
+      </Dropdown>
     );
   }
 }
 
 DropdownSelect.propTypes = {
-  list: PropTypes.array,
-  label: PropTypes.string,
-  name: PropTypes.string,
-  placeholder: PropTypes.string,
+  quizzes: PropTypes.array,
+  className: PropTypes.string,
+  quizName: PropTypes.string,
+  onChange: PropTypes.func,
+  disabled: PropTypes.bool,
 };
 
 export default DropdownSelect;

@@ -5,9 +5,10 @@ import axios from 'axios';
 import QuizQuestions from './components/QuizQuestions';
 import Loader from './components/Loader';
 import { Title } from './components/Title';
+import DropdownSelect from './components/DropdownSelect';
 import Button from './components/Button';
 
-const apiUrl = `https://printful.com/test-quiz.php?action=`;
+import { apiUrl } from './components/api';
 
 const Main = styled.section`
   width: 100%;
@@ -21,16 +22,18 @@ const Main = styled.section`
 
 const Input = styled.input`
   width: 100%;
-  padding: 0 30px;
+  padding: 0 20px;
   height: 56px;
-  border-radius: 4.5px;
+  border-radius: 4px;
   border-width: 2px;
   border-style: solid;
+  border-color: #000;
   background-color: #ffffff;
   font-size: 18px;
   line-height: 52px;
   max-width: 500px;
   margin-bottom: 20px;
+  font-family: 'Raleway', Helvetica Neue, Helvetica, Arial, sans-serif;
 
   @media screen and (min-width: 600px) {
     padding: 0 30px;
@@ -39,11 +42,8 @@ const Input = styled.input`
     border-width: 3px;
     font-size: 24px;
     line-height: 80px;
+    margin-bottom: 40px;
   }
-`;
-
-const Select = styled.select`
-  margin-bottom: 20px;
 `;
 
 class App extends Component {
@@ -52,7 +52,8 @@ class App extends Component {
     isLoading: false,
     name: '',
     quizzes: [],
-    quizId: null,
+    quizId: '',
+    quizName: '',
     questions: [],
   };
 
@@ -70,7 +71,12 @@ class App extends Component {
   };
 
   handleChange = e => {
-    this.setState({ quizId: e.target.value });
+    const index = e.nativeEvent.target.selectedIndex;
+
+    this.setState({
+      quizId: e.target.value,
+      quizName: e.nativeEvent.target[index].text,
+    });
   };
 
   handleClick = () => {
@@ -86,8 +92,15 @@ class App extends Component {
   };
 
   render() {
-    const { isLoading } = this.state;
-    const { quizzes, questions, name, quizId, start } = this.state;
+    const {
+      isLoading,
+      quizzes,
+      questions,
+      name,
+      quizId,
+      start,
+      quizName,
+    } = this.state;
 
     return (
       <Main role='main'>
@@ -102,18 +115,17 @@ class App extends Component {
               value={name}
               required
             />
-            <Select disabled={!name} onChange={this.handleChange}>
-              <option>Please choose quiz</option>
-              {quizzes.map((item, i) => (
-                <option key={i.toString()} value={item.id}>
-                  {item.title}
-                </option>
-              ))}
-            </Select>
+            <DropdownSelect
+              className={!name ? 'disabled' : ''}
+              onChange={this.handleChange}
+              disabled={!name}
+              quizName={quizName}
+              quizzes={quizzes}
+            />
             <Button
               title='start'
               text='Start'
-              disabled={!quizId}
+              disabled={!quizId || !name}
               onClick={this.handleClick}
               className={quizId ? 'animation' : ''}
             />
