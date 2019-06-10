@@ -1,3 +1,5 @@
+/* eslint-disable react/jsx-filename-extension */
+
 import 'normalize.css';
 
 import React from 'react';
